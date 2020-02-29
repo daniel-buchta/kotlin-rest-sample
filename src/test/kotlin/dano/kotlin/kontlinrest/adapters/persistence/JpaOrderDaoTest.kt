@@ -1,21 +1,15 @@
 package dano.kotlin.kontlinrest.adapters.persistence
 
 import dano.kotlin.kontlinrest.adapters.persistence.model.OrderJpa
-import dano.kotlin.kontlinrest.application.OrderService
 import dano.kotlin.kontlinrest.application.any
-import dano.kotlin.kontlinrest.domain.dao.OrderDao
 import dano.kotlin.kontlinrest.domain.model.entities.Order
-import org.assertj.core.api.Assertions
 import org.assertj.core.api.Assertions.assertThat
-import org.junit.jupiter.api.Assertions.*
 
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
-import org.mockito.AdditionalAnswers
 import org.mockito.AdditionalAnswers.returnsFirstArg
 import org.mockito.InjectMocks
 import org.mockito.Mock
-import org.mockito.Mockito
 import org.mockito.Mockito.`when`
 import org.mockito.junit.jupiter.MockitoExtension
 

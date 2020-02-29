@@ -1,0 +1,8 @@
+<?xml version="1.0" ?>
+<SmellBaseline>
+  <Blacklist />
+  <Whitelist>
+    <ID>SpreadOperator:KontlinRestApplication.kt$(*args)</ID>
+    <ID>WildcardImport:OrderController.kt$import org.springframework.web.bind.annotation.*</ID>
+  </Whitelist>
+</SmellBaseline>

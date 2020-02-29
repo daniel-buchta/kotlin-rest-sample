@@ -17,5 +17,5 @@ data class OrderJpa(
 ) {
     constructor(order: Order) : this(id = order.id, items = order.items.map { OrderItemJpa(it) })
 
-    fun toOrder(): Order = Order(id = this.id, items = this.items.map { it.toOrderItem()})
+    fun toOrder(): Order = Order(id = this.id, items = this.items.map { it.toOrderItem() })
 }

@@ -37,7 +37,7 @@ internal class OrderServiceTest {
 
         `when`(dao.save(any(Order::class.java))).thenAnswer(returnsFirstArg<Order>())
 
-        //run
+        // run
         val result = orderService.createOrder(order)
 
         // verify
@@ -49,7 +49,7 @@ internal class OrderServiceTest {
         // setup
         val order = Order(id = 1, items = emptyList())
 
-        //run & verify
+        // run & verify
         assertThatThrownBy { orderService.createOrder(order) }
                 .isInstanceOf(InvalidOrderException::class.java)
     }
@@ -61,7 +61,7 @@ internal class OrderServiceTest {
 
         `when`(dao.findById(order.id)).thenReturn(order)
 
-        //run & verify
+        // run & verify
         assertThatThrownBy { orderService.createOrder(order) }
                 .isInstanceOf(OrderExistsException::class.java)
     }
@@ -73,7 +73,7 @@ internal class OrderServiceTest {
 
         `when`(dao.save(any(Order::class.java))).thenAnswer(returnsFirstArg<Order>())
 
-        //run
+        // run
         val result = orderService.updateOrder(order)
 
         // verify
@@ -89,7 +89,7 @@ internal class OrderServiceTest {
                 .thenReturn(Order(id = 5, items = listOf(OrderItem(name = "Item2", count = 5))))
         `when`(dao.save(any(Order::class.java))).thenAnswer(returnsFirstArg<Order>())
 
-        //run
+        // run
         val result = orderService.updateOrder(order)
 
         // verify
@@ -105,7 +105,7 @@ internal class OrderServiceTest {
         `when`(dao.findById(order.id))
                 .thenReturn(Order(id = 5, state = state, items = listOf(OrderItem(name = "Item2", count = 5))))
 
-        //run & verify
+        // run & verify
         assertThatThrownBy { orderService.updateOrder(order) }
                 .isInstanceOf(OrderStateException::class.java)
     }
@@ -125,13 +125,10 @@ internal class OrderServiceTest {
 
     @Test
     fun `getOrder throws exception if order doesn't exist`() {
-        // setup
-
         // run & verify
         assertThatThrownBy { orderService.getOrder(42) }
                 .isInstanceOf(OrderNotFoundException::class.java)
     }
-
 }
 
 fun <T> any(type: Class<T>): T = Mockito.any<T>(type)

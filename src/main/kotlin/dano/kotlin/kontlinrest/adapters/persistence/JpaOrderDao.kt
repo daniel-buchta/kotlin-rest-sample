@@ -6,7 +6,7 @@ import dano.kotlin.kontlinrest.domain.model.entities.Order
 import mu.KotlinLogging
 import org.springframework.stereotype.Component
 
-
+// declare class logger
 private val log = KotlinLogging.logger {}
 
 @Component
@@ -20,6 +20,5 @@ class JpaOrderDao(private val repository: OrderRepository) : OrderDao {
                     .orElse(null)
                     .apply { log.info { "findById($id) -> $this" } }
 
-    override fun findAll(): List<Order> =  repository.findAll().map { it.toOrder() }
-
+    override fun findAll(): List<Order> = repository.findAll().map { it.toOrder() }
 }

@@ -59,7 +59,7 @@ class OrderService(private val dao: OrderDao) {
         return dao.findById(orderId)?.apply { log.info { "Retrieved order: $this" } }
                 ?: run {
                     log.warn { "No order exists for id $orderId" }
-                    throw OrderNotFoundException("Order #${orderId} doesn't exist")
+                    throw OrderNotFoundException("Order #$orderId doesn't exist")
                 }
     }
 
