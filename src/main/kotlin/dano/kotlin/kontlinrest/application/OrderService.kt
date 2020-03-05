@@ -13,7 +13,10 @@ import org.springframework.stereotype.Service
 private val log = KotlinLogging.logger {}
 
 @Service
-class OrderService(private val dao: OrderDao) {
+class OrderService(
+        private val dao: OrderDao,
+        private val config: OrderConfigProperties
+) {
 
     /**
      * Creates new order
@@ -21,7 +24,7 @@ class OrderService(private val dao: OrderDao) {
      * @return created order
      * */
     fun createOrder(order: Order): Order {
-        log.debug { "Creating order: $order" }
+        log.debug { "Creating order: $order [$config]" }
 
         val orderToCreate = order.prepareToCreateIfValid() ?: run {
             log.warn { "Can't create invalid order: $order" }
@@ -33,7 +36,7 @@ class OrderService(private val dao: OrderDao) {
             throw OrderExistsException("Order #${order.id} already in exists")
         }
 
-        return dao.save(orderToCreate).apply { log.info { "Created order: $this" } }
+        return dao.save(orderToCreate).apply { log.info { "Created order: $this [$config]" } }
     }
 
     fun updateOrder(order: Order): Order {

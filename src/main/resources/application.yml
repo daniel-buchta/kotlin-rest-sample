@@ -1,1 +1,9 @@
+spring:
+  jpa:
+    open-in-view: off
 
+app:
+  order:
+    name: Foo
+    version: Bar
+    build: Test

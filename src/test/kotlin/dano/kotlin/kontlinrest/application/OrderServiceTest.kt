@@ -8,26 +8,27 @@ import dano.kotlin.kontlinrest.domain.model.exceptions.OrderExistsException
 import dano.kotlin.kontlinrest.domain.model.exceptions.OrderNotFoundException
 import dano.kotlin.kontlinrest.domain.model.exceptions.OrderStateException
 import dano.kotlin.kontlinrest.domain.model.valueobjects.OrderItem
+import io.mockk.every
+import io.mockk.impl.annotations.InjectMockKs
+import io.mockk.impl.annotations.RelaxedMockK
+import io.mockk.junit5.MockKExtension
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.EnumSource
-import org.mockito.AdditionalAnswers.returnsFirstArg
-import org.mockito.InjectMocks
-import org.mockito.Mock
-import org.mockito.Mockito
-import org.mockito.Mockito.`when`
-import org.mockito.junit.jupiter.MockitoExtension
 
-@ExtendWith(MockitoExtension::class)
+@ExtendWith(MockKExtension::class)
 internal class OrderServiceTest {
 
-    @Mock
+    @RelaxedMockK
     private lateinit var dao: OrderDao
 
-    @InjectMocks
+    @RelaxedMockK
+    private lateinit var config: OrderConfigProperties
+
+    @InjectMockKs
     private lateinit var orderService: OrderService
 
     @Test
@@ -35,7 +36,8 @@ internal class OrderServiceTest {
         // setup
         val order = Order(id = 1, items = listOf(OrderItem(name = "Item1", count = 3)))
 
-        `when`(dao.save(any(Order::class.java))).thenAnswer(returnsFirstArg<Order>())
+        every { dao.findById(any()) } returns null
+        every { dao.save(any()) } returnsArgument 0
 
         // run
         val result = orderService.createOrder(order)
@@ -59,7 +61,7 @@ internal class OrderServiceTest {
         // setup
         val order = Order(id = 1, items = listOf(OrderItem(name = "Item1", count = 3)))
 
-        `when`(dao.findById(order.id)).thenReturn(order)
+        every { dao.findById(order.id) } returns order
 
         // run & verify
         assertThatThrownBy { orderService.createOrder(order) }
@@ -71,7 +73,8 @@ internal class OrderServiceTest {
         // setup
         val order = Order(id = 5, items = listOf(OrderItem(name = "Item1", count = 7)))
 
-        `when`(dao.save(any(Order::class.java))).thenAnswer(returnsFirstArg<Order>())
+        every { dao.findById(any()) } returns null
+        every { dao.save(any()) } returnsArgument 0
 
         // run
         val result = orderService.updateOrder(order)
@@ -85,9 +88,8 @@ internal class OrderServiceTest {
         // setup
         val order = Order(id = 5, items = listOf(OrderItem(name = "Item1", count = 7)))
 
-        `when`(dao.findById(order.id))
-                .thenReturn(Order(id = 5, items = listOf(OrderItem(name = "Item2", count = 5))))
-        `when`(dao.save(any(Order::class.java))).thenAnswer(returnsFirstArg<Order>())
+        every { dao.findById(order.id) } returns Order(id = 5, items = listOf(OrderItem(name = "Item2", count = 5)))
+        every { dao.save(any()) } returnsArgument 0
 
         // run
         val result = orderService.updateOrder(order)
@@ -102,8 +104,8 @@ internal class OrderServiceTest {
         // setup
         val order = Order(id = 5, items = listOf(OrderItem(name = "Item1", count = 7)))
 
-        `when`(dao.findById(order.id))
-                .thenReturn(Order(id = 5, state = state, items = listOf(OrderItem(name = "Item2", count = 5))))
+        every { dao.findById(order.id) } returns
+                Order(id = 5, state = state, items = listOf(OrderItem(name = "Item2", count = 5)))
 
         // run & verify
         assertThatThrownBy { orderService.updateOrder(order) }
@@ -114,7 +116,7 @@ internal class OrderServiceTest {
     fun `getOrder returns order if exist`() {
         // setup
         val expected = Order(id = 5, items = listOf(OrderItem(name = "Item2", count = 5)))
-        `when`(dao.findById(expected.id)).thenReturn(expected)
+        every { dao.findById(expected.id) } returns expected
 
         // run
         val result = orderService.getOrder(expected.id)
@@ -126,9 +128,8 @@ internal class OrderServiceTest {
     @Test
     fun `getOrder throws exception if order doesn't exist`() {
         // run & verify
+        every { dao.findById(any()) } returns null
         assertThatThrownBy { orderService.getOrder(42) }
                 .isInstanceOf(OrderNotFoundException::class.java)
     }
 }
-
-fun <T> any(type: Class<T>): T = Mockito.any<T>(type)
