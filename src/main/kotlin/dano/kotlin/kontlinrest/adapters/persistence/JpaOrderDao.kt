@@ -5,11 +5,13 @@ import dano.kotlin.kontlinrest.domain.dao.OrderDao
 import dano.kotlin.kontlinrest.domain.model.entities.Order
 import mu.KotlinLogging
 import org.springframework.stereotype.Component
+import org.springframework.transaction.annotation.Transactional
 
 // declare class logger
 private val log = KotlinLogging.logger {}
 
 @Component
+@Transactional
 class JpaOrderDao(private val repository: OrderRepository) : OrderDao {
 
     override fun save(order: Order): Order =

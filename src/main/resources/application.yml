@@ -2,8 +2,17 @@ spring:
   jpa:
     open-in-view: off
 
+application:
+
+
+#:description: ^project.description^
+#application-version: ^project.version^
+
 app:
   order:
     name: Foo
     version: Bar
     build: Test
+server:
+  servlet:
+    application-display-name:

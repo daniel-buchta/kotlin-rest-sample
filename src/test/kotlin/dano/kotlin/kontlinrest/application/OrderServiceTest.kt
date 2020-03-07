@@ -10,7 +10,7 @@ import dano.kotlin.kontlinrest.domain.model.exceptions.OrderStateException
 import dano.kotlin.kontlinrest.domain.model.valueobjects.OrderItem
 import io.mockk.every
 import io.mockk.impl.annotations.InjectMockKs
-import io.mockk.impl.annotations.RelaxedMockK
+import io.mockk.impl.annotations.MockK
 import io.mockk.junit5.MockKExtension
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.assertThatThrownBy
@@ -22,10 +22,10 @@ import org.junit.jupiter.params.provider.EnumSource
 @ExtendWith(MockKExtension::class)
 internal class OrderServiceTest {
 
-    @RelaxedMockK
+    @MockK
     private lateinit var dao: OrderDao
 
-    @RelaxedMockK
+    @MockK
     private lateinit var config: OrderConfigProperties
 
     @InjectMockKs

@@ -8,11 +8,14 @@ import dano.kotlin.kontlinrest.domain.model.exceptions.OrderNotFoundException
 import dano.kotlin.kontlinrest.domain.model.exceptions.OrderStateException
 import mu.KotlinLogging
 import org.springframework.stereotype.Service
+import org.springframework.validation.annotation.Validated
+import javax.validation.Valid
 
 
 private val log = KotlinLogging.logger {}
 
 @Service
+@Validated
 class OrderService(
         private val dao: OrderDao,
         private val config: OrderConfigProperties
@@ -23,7 +26,7 @@ class OrderService(
      * @param order order to create
      * @return created order
      * */
-    fun createOrder(order: Order): Order {
+    fun createOrder(@Valid order: Order): Order {
         log.debug { "Creating order: $order [$config]" }
 
         val orderToCreate = order.prepareToCreateIfValid() ?: run {
@@ -39,7 +42,7 @@ class OrderService(
         return dao.save(orderToCreate).apply { log.info { "Created order: $this [$config]" } }
     }
 
-    fun updateOrder(order: Order): Order {
+    fun updateOrder(@Valid order: Order): Order {
         log.debug { "Updating order: $order" }
 
         if (!order.isUpdatable()) {
